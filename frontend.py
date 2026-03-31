@@ -3,6 +3,13 @@ import requests
 import pandas as pd
 import plotly.express as px
 from streamlit_agraph import agraph, Node, Edge, Config
+import os
+
+api_base_url = st.secrets.get("API_BASE_URL", os.getenv("API_BASE_URL", "http://localhost:8000")).rstrip("/")
+
+
+def api_url(path: str) -> str:
+    return f"{api_base_url}{path}"
 
 # Set page config for a professional look
 st.set_page_config(page_title="SMM Evaluation Engine", layout="wide")
@@ -24,7 +31,7 @@ if layer == "1. Digital Twin":
     with col1:
         st.subheader("Live Production KPIs")
         if st.button("Fetch Live IoT Data"):
-            res = requests.get("http://localhost:8000/api/v1/operational/digital-twin/kpis").json()
+            res = requests.get(api_url("/api/v1/operational/digital-twin/kpis")).json()
             st.metric("Machine Utilization", f"{res['machine_utilization_pct']}%")
             st.metric("Throughput (Units/Hr)", res['production_throughput_units_per_hr'])
             if res['anomaly_detected']:
@@ -32,7 +39,7 @@ if layer == "1. Digital Twin":
     
     with col2:
         st.subheader("Human Capital: Wage-Skill Plot")
-        res = requests.get("http://localhost:8000/api/v1/operational/human-capital/wage-skill").json()
+        res = requests.get(api_url("/api/v1/operational/human-capital/wage-skill")).json()
         df = pd.DataFrame(res['nodes'])
         fig = px.scatter(df, x="skill_level", y="wage_usd_hr", size="flight_risk", 
                          color="flight_risk", hover_name="employee_id",
@@ -46,7 +53,7 @@ if layer == "1. Digital Twin":
     
     try:
         # Fetch the coordinates and status
-        layout_res = requests.get("http://localhost:8000/api/v1/operational/digital-twin/layout-3d").json()
+        layout_res = requests.get(api_url("/api/v1/operational/digital-twin/layout-3d")).json()
         df_3d = pd.DataFrame(layout_res['machines'])
 
         # Hardcode the colors so "Downtime" is always red, etc.
@@ -99,7 +106,7 @@ elif layer == "2. Market Dynamics":
                 "employee_turnover": turnover,
                 "market_demand_trend": demand
             }
-            res = requests.post("http://localhost:8000/api/v1/market/predict-exit", json=payload).json()
+            res = requests.post(api_url("/api/v1/market/predict-exit"), json=payload).json()
             st.warning(f"Exit Probability: {res['exit_probability']:.2%}")
             st.write(f"**Recommendation:** {res['recommendation']}")
 
@@ -110,7 +117,7 @@ elif layer == "2. Market Dynamics":
     st.write("Visualizing latent dependencies and hidden supplier failures.")
     
     try:
-        graph_data = requests.get("http://localhost:8000/api/v1/operational/supply-chain/graph").json()
+        graph_data = requests.get(api_url("/api/v1/operational/supply-chain/graph")).json()
 
         nodes = [Node(id=n['id'], label=n['label'], size=n['size'], color=n['color']) for n in graph_data['nodes']]
         edges = [Edge(source=e['source'], target=e['target'], label=e['label'], length=300) for e in graph_data['edges']]
@@ -136,7 +143,7 @@ elif layer == "2. Market Dynamics":
             st.sidebar.markdown("---")
             st.sidebar.subheader(f"🔍 Asset Valuation: {clicked_node_id}")
             
-            val_url = f"http://localhost:8000/api/v1/market/valuation/{clicked_node_id}"
+            val_url = api_url(f"/api/v1/market/valuation/{clicked_node_id}")
             val_res = requests.get(val_url).json()
             
             st.sidebar.metric("Stability Index", val_res['stability_index'])
@@ -163,12 +170,12 @@ elif layer == "3. Legal & Disclosure":
     col1, col2 = st.columns(2)
     with col1:
         st.subheader("Ownership Rights (PA Title 15)")
-        res = requests.get("http://localhost:8000/api/v1/legal/compliance/ownership-rights").json()
+        res = requests.get(api_url("/api/v1/legal/compliance/ownership-rights")).json()
         st.write(f"**Regulation:** {res['regulation']}")
         st.write(f"**Status:** {res['liability_status']}")
         
     with col2:
         st.subheader("Knowledge Disclosure (PA UTSA)")
-        res = requests.get("http://localhost:8000/api/v1/legal/compliance/knowledge-disclosure").json()
+        res = requests.get(api_url("/api/v1/legal/compliance/knowledge-disclosure")).json()
         st.write(f"**CAD Encryption:** {'✅ Active' if res['cad_encryption_status'] else '❌ Inactive'}")
         st.write(f"**Compliance:** {'Verified' if res['is_compliant'] else 'Attention Required'}")
