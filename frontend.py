@@ -88,7 +88,7 @@ if layer == "1. Digital Twin":
             st.plotly_chart(
                 fig_3d, 
                 use_container_width=True,  # Tells Plotly to fill the 80% column
-                config={'scrollZoom': True} 
+                config={'scrollZoom': False} 
             )
         
     except Exception as e:
