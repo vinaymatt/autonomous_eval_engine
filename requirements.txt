@@ -3,3 +3,4 @@ mangum
 numpy
 pydantic
 scikit-learn
+uvicorn
