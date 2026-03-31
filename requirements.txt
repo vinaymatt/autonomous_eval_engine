@@ -4,3 +4,7 @@ numpy
 pydantic
 scikit-learn
 uvicorn
+plotly
+streamlit
+requests
+streamlit-agraph
