@@ -80,9 +80,16 @@ if layer == "1. Digital Twin":
                 yaxis=dict(title="Factory Y-Axis (meters)")
             ),
             margin=dict(l=0, r=0, b=0, t=0) # Keeps the chart flush with the container
-        )
-        
-        st.plotly_chart(fig_3d, width='stretch', height=700)
+        )     
+        # Create columns to handle the width (10% | 80% | 10%)
+        spacer_left, chart_col, spacer_right = st.columns([1, 8, 1])
+        with chart_col:
+            # 2. Render the chart inside the middle 80% column
+            st.plotly_chart(
+                fig_3d, 
+                use_container_width=True,  # Tells Plotly to fill the 80% column
+                config={'scrollZoom': True} 
+            )
         
     except Exception as e:
         st.error(f"Could not load 3D layout data: {e}")
@@ -135,6 +142,11 @@ elif layer == "2. Market Dynamics":
         config.physics = custom_physics
         config.width = "100%"
         config.height = "700px"
+        # Disable scroll hijacking using setattr to bypass Pylance/Linter
+        setattr(config, "interaction", {
+            "zoomView": False,  # Disables the scroll-to-zoom behavior
+            "dragView": True    # Keeps the ability to pan around the canvas
+        })
 
         # Use # type: ignore to hide the 'no parameter named key' linter error
         clicked_node_id = agraph(nodes=nodes, edges=edges, config=config) # type: ignore
