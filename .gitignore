@@ -1,0 +1,66 @@
+# ==========================================
+# Python & Bytecode
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+
+# ==========================================
+# Environments & Secrets
+# ==========================================
+# Ignore standard virtual environments
+venv/
+env/
+.venv/
+eval_engine_env/
+# Ignore environment variables (never commit API keys or passwords!)
+.env
+
+# ==========================================
+# IDE & Editor (VS Code / Pylance)
+# ==========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ==========================================
+# OS Generated Files
+# ==========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ==========================================
+# Logs & Application Cache
+# ==========================================
+*.log
+.pytest_cache/
+.mypy_cache/
+
+# ==========================================
+# Streamlit Specifics
+# ==========================================
+# Never commit secrets, but allow config.toml if you add one later
+.streamlit/secrets.toml
+
+# ==========================================
+# Machine Learning & Data
+# ==========================================
+# Ignore large model weights and local data dumps
+*.pt
+*.pth
+*.pkl
+*.joblib
+*.h5
+
+# Ignore all large data files in the data folder...
+/data/*.csv
+# ...but explicitly ALLOW your demo JSON to be tracked
+!/data/dummy_smm_data.json

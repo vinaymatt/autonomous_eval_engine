@@ -126,8 +126,8 @@ elif layer == "2. Market Dynamics":
             "solver": "repulsion",
             "repulsion": {
                 "nodeDistance": 200,      # Pushes nodes away from each other
-                "springLength": 300,      # Stretches the resting length of the edges
-                "springConstant": 0.03    # Lowers the tension so dragging feels natural
+                "springLength": 350,      # Stretches the resting length of the edges
+                "springConstant": 0.02    # Lowers the tension so dragging feels natural
             }
         }
         config = Config(width=700, height=500, directed=True, hierarchical=False)
