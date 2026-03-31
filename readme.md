@@ -80,6 +80,38 @@ streamlit run frontend.py
 
 The API will be available at `http://127.0.0.1:8000`. You can access the interactive documentation (Swagger UI) at `http://127.0.0.1:8000/docs`.
 
+## 🌐 Deploying the API on Netlify
+
+This repository is configured to deploy the **FastAPI backend** as a Netlify Python Function.
+
+### What gets deployed
+
+- FastAPI API endpoints from `main.py` and `api/routers/*`
+- Serverless entrypoint: `netlify/functions/api.py`
+- Netlify configuration: `netlify.toml`
+
+> Note: The Streamlit UI (`frontend.py`) is not hosted by Netlify Functions. Keep it local or deploy it on a Streamlit-compatible host.
+
+### Steps
+
+1. Push this repository to GitHub.
+2. In Netlify, create a new site from that repository.
+3. Netlify should auto-detect `netlify.toml` and use:
+   - Build command: `mkdir -p public && printf 'Autonomous Evaluation Engine API is live.\n' > public/index.html`
+   - Publish directory: `public`
+   - Functions directory: `netlify/functions`
+4. Deploy.
+
+### API base path on Netlify
+
+The redirect config maps:
+
+- `/api/*` -> `/.netlify/functions/api/:splat`
+
+So your endpoint example becomes:
+
+- `https://<your-netlify-site>.netlify.app/api/api/v1/operational/digital-twin/kpis`
+
 ## 🏗 Project Structure
 
 ```text

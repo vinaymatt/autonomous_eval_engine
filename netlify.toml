@@ -1,0 +1,15 @@
+[build]
+  command = "mkdir -p public && printf 'Autonomous Evaluation Engine API is live.\n' > public/index.html"
+  publish = "public"
+  functions = "netlify/functions"
+
+[build.environment]
+  PYTHON_VERSION = "3.11"
+
+[functions]
+  directory = "netlify/functions"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
