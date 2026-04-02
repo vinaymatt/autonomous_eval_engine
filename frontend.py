@@ -545,7 +545,7 @@ if layer == "1. Digital Twin":
     st.caption("Interactive factory simulation \u2014 orbit with mouse, hover machines for details.")
 
     try:
-        layout_res = requests.get("http://localhost:8000/api/v1/operational/digital-twin/layout-3d").json()
+        layout_res = requests.get(api_url("/api/v1/operational/digital-twin/layout-3d")).json()
         render_factory_3d(layout_res['machines'], layout_res.get('conveyors', []))
     except Exception as e:
         st.error(f"Could not load 3D layout data: {e}")
