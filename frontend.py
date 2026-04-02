@@ -7,7 +7,11 @@ import streamlit.components.v1 as components
 from streamlit_agraph import agraph, Node, Edge, Config
 import os
 
-api_base_url = st.secrets.get("API_BASE_URL", os.getenv("API_BASE_URL", "http://localhost:8000")).rstrip("/")
+try:
+    api_base_url = st.secrets["API_BASE_URL"]
+except (FileNotFoundError, KeyError):
+    api_base_url = os.getenv("API_BASE_URL", "http://localhost:8000")
+api_base_url = api_base_url.rstrip("/")
 
 
 def api_url(path: str) -> str:
@@ -418,15 +422,20 @@ CD.forEach(cv => {
     scene.add(sup);
   }
 
-  const nItems = Math.max(2, Math.floor(len / 4));
-  for (let i = 0; i < nItems; i++) {
-    const item = new THREE.Mesh(
-      new THREE.BoxGeometry(0.25, 0.15, 0.25),
-      new THREE.MeshStandardMaterial({color:0xddaa44})
-    );
-    item.castShadow = true;
-    scene.add(item);
-    anims.push({m:item, t:'cv', from:cv.from, to:cv.to, p:i/nItems, s:0.003});
+  const nearDowntime = MD.some(m => m.status === 'Downtime' &&
+    (Math.abs(m.x-x1)+Math.abs(m.y-z1) < 4 || Math.abs(m.x-x2)+Math.abs(m.y-z2) < 4));
+
+  if (!nearDowntime) {
+    const nItems = Math.max(2, Math.floor(len / 4));
+    for (let i = 0; i < nItems; i++) {
+      const item = new THREE.Mesh(
+        new THREE.BoxGeometry(0.25, 0.15, 0.25),
+        new THREE.MeshStandardMaterial({color:0xddaa44})
+      );
+      item.castShadow = true;
+      scene.add(item);
+      anims.push({m:item, t:'cv', from:cv.from, to:cv.to, p:i/nItems, s:0.003});
+    }
   }
 });
 

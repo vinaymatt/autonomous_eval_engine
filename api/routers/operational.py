@@ -42,9 +42,9 @@ def get_3d_layout():
     """Returns spatial coordinates, live status, and conveyor topology of factory machinery."""
     return {
         "machines": [
-            {"id": "CNC_Mill_01", "type": "Milling", "x": 8, "y": 8, "z": 0, "status": "Active", "efficiency": 0.95},
-            {"id": "CNC_Mill_02", "type": "Milling", "x": 14, "y": 8, "z": 0, "status": "Active", "efficiency": 0.88},
-            {"id": "CNC_Mill_03", "type": "Milling", "x": 8, "y": 14, "z": 0, "status": "Maintenance", "efficiency": 0.50},
+            {"id": "Mill_01", "type": "Milling", "x": 8, "y": 8, "z": 0, "status": "Active", "efficiency": 0.95},
+            {"id": "Mill_02", "type": "Milling", "x": 14, "y": 8, "z": 0, "status": "Active", "efficiency": 0.88},
+            {"id": "Mill_03", "type": "Milling", "x": 8, "y": 14, "z": 0, "status": "Maintenance", "efficiency": 0.50},
             {"id": "Lathe_01", "type": "Turning", "x": 26, "y": 8, "z": 0, "status": "Active", "efficiency": 0.92},
             {"id": "Lathe_02", "type": "Turning", "x": 26, "y": 14, "z": 0, "status": "Downtime", "efficiency": 0.0},
             {"id": "Laser_Cut_01", "type": "Cutting", "x": 8, "y": 24, "z": 0, "status": "Active", "efficiency": 0.91},
