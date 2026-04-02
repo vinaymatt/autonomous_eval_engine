@@ -39,13 +39,23 @@ def get_supply_chain_graph():
 
 @router.get("/digital-twin/layout-3d")
 def get_3d_layout():
-    """Returns spatial coordinates and live status of factory machinery."""
+    """Returns spatial coordinates, live status, and conveyor topology of factory machinery."""
     return {
         "machines": [
-            {"id": "CNC_Milling_1", "type": "Milling", "x": 10, "y": 20, "z": 0, "status": "Active", "efficiency": 0.95},
-            {"id": "CNC_Milling_2", "type": "Milling", "x": 15, "y": 20, "z": 0, "status": "Active", "efficiency": 0.88},
-            {"id": "Lathe_Alpha", "type": "Turning", "x": 30, "y": 10, "z": 0, "status": "Downtime", "efficiency": 0.0},
-            {"id": "Laser_Cutter", "type": "Cutting", "x": 5, "y": 5, "z": 0, "status": "Maintenance", "efficiency": 0.50},
-            {"id": "CMM_Scanner", "type": "Inspection", "x": 25, "y": 30, "z": 0, "status": "Active", "efficiency": 0.99}
+            {"id": "CNC_Mill_01", "type": "Milling", "x": 8, "y": 8, "z": 0, "status": "Active", "efficiency": 0.95},
+            {"id": "CNC_Mill_02", "type": "Milling", "x": 14, "y": 8, "z": 0, "status": "Active", "efficiency": 0.88},
+            {"id": "CNC_Mill_03", "type": "Milling", "x": 8, "y": 14, "z": 0, "status": "Maintenance", "efficiency": 0.50},
+            {"id": "Lathe_01", "type": "Turning", "x": 26, "y": 8, "z": 0, "status": "Active", "efficiency": 0.92},
+            {"id": "Lathe_02", "type": "Turning", "x": 26, "y": 14, "z": 0, "status": "Downtime", "efficiency": 0.0},
+            {"id": "Laser_Cut_01", "type": "Cutting", "x": 8, "y": 24, "z": 0, "status": "Active", "efficiency": 0.91},
+            {"id": "Plasma_Cut_01", "type": "Cutting", "x": 14, "y": 24, "z": 0, "status": "Active", "efficiency": 0.85},
+            {"id": "CMM_01", "type": "Inspection", "x": 26, "y": 24, "z": 0, "status": "Active", "efficiency": 0.99},
+            {"id": "Assembly_01", "type": "Assembly", "x": 18, "y": 16, "z": 0, "status": "Active", "efficiency": 0.90},
+        ],
+        "conveyors": [
+            {"from": [16, 8], "to": [24, 8]},
+            {"from": [16, 24], "to": [24, 24]},
+            {"from": [8, 16], "to": [8, 22]},
+            {"from": [26, 16], "to": [26, 22]},
         ]
     }
