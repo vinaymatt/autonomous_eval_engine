@@ -426,7 +426,7 @@ def get_internal_health_index():
             "health_factors": [
                 {"factor": "Laser source", "status": "nominal", "detail": "6kW IPG fiber source — 22,600 hrs on module, rated 100,000 hrs"},
                 {"factor": "Cutting head lens", "status": "nominal", "detail": "Last replaced Jan 2026 — ~1,200 pierce cycles remaining"},
-                {"factor": "Assist gas consumption", "status": "warning", "detail": "N2 consumption up 12% — nozzle wear suspected. Linde delivery costs up 18% due to Iran conflict."},
+                {"factor": "Assist gas consumption", "status": "warning", "detail": "N2 consumption up 12% — nozzle wear suspected. Linde delivery surcharges currently ~18% above Q4 2025 baseline due to elevated energy prices."},
             ],
         },
         {
@@ -557,17 +557,17 @@ def get_external_health_index():
 
     geopolitical_factors = [
         {
-            "factor": "Iran conflict — Strait of Hormuz closure",
+            "factor": "Iran conflict — Strait of Hormuz disruption (current)",
             "score": 0.38,
             "weight": 0.20,
             "status": "critical",
             "detail": (
-                "Brent crude at $108/bbl (+77% since Dec 2025). US gas at $3.98/gal (+30%). "
-                "The Strait of Hormuz — through which 21M barrels/day normally transit — is effectively closed due to Iranian attacks on shipping. "
-                "DIRECT IMPACT on Hartwell: (1) Linde Gas delivery costs up 18% — nitrogen and argon essential for laser cutting and welding; "
-                "(2) Diesel freight costs (FedEx, Ryerson deliveries) up 33%; "
-                "(3) Quaker Houghton petroleum-based coolant prices up 22%; "
-                "(4) Overall energy cost increase adds ~$147,000/yr to operating expenses."
+                "As of April 2026, Brent crude is trading near $108/bbl (+77% since Dec 2025) "
+                "and US gasoline has reached ~$3.98/gal, driven by disruptions to Strait of Hormuz shipping. "
+                "Current observed impacts on Hartwell: Linde Gas delivery surcharges up ~18%; "
+                "diesel freight (FedEx, Ryerson) up ~33%; Quaker Houghton coolant pricing up ~22%. "
+                "If these conditions persist through the next 12 months, projected additional operating cost: ~$147,000/yr. "
+                "Should the conflict de-escalate, energy prices could normalize within 2-3 quarters, reducing this pressure significantly."
             ),
         },
         {
@@ -576,21 +576,22 @@ def get_external_health_index():
             "weight": 0.10,
             "status": "nominal",
             "detail": (
-                "FY2026 DoD budget increased 8.4% to $895B. BAE Systems and General Dynamics expanding "
-                "procurement — Hartwell order backlog for defense components up 14% YoY. "
-                "Positive demand signal, but creates paradox: higher demand while input costs rise."
+                "FY2026 DoD budget increased 8.4% to $895B. BAE Systems and General Dynamics are expanding "
+                "procurement — Hartwell order backlog for defense components is up 14% YoY. "
+                "This creates a positive demand signal, though it also presents a paradox: "
+                "rising demand coincides with rising input costs, compressing margins if energy prices remain elevated."
             ),
         },
         {
-            "factor": "Titanium supply chain geopolitical risk",
+            "factor": "Titanium supply chain geopolitical exposure",
             "score": 0.42,
             "weight": 0.10,
             "status": "critical",
             "detail": (
-                "Global Ti sponge supply disrupted. TIMET (Titanium Industries' upstream supplier) "
-                "sources ~15% of sponge from Kazakhstan, which borders both Russia and China. "
-                "Combined with aerospace demand surge, Ti-6Al-4V spot prices up 34% since January 2026. "
-                "Hartwell titanium material costs increased ~$89,000/yr."
+                "TIMET (Titanium Industries' upstream supplier) sources ~15% of Ti sponge from Kazakhstan. "
+                "Ongoing regional instability and surging aerospace demand have pushed Ti-6Al-4V spot prices up ~34% since Jan 2026. "
+                "If current pricing holds, Hartwell's projected additional titanium material cost is ~$89,000/yr. "
+                "Mitigation option: negotiate 6-month fixed-price contracts with Titanium Industries to lock in current rates."
             ),
         },
     ]
@@ -619,6 +620,7 @@ def get_external_health_index():
             },
         },
         "cost_impact_summary": {
+            "label": "Projected 12-month impact if current conditions persist",
             "iran_conflict_annual_cost_increase_usd": 147000,
             "titanium_price_increase_annual_usd": 89000,
             "total_external_cost_pressure_usd": 236000,

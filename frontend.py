@@ -30,35 +30,53 @@ st.set_page_config(
 st.markdown("""<style>
     .block-container { padding-top: 1rem; }
     div[data-testid="stMetric"] {
-        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-        border: 1px solid rgba(255,255,255,0.08);
+        background: #f0f2f6;
+        border: 1px solid #d1d5db;
         border-radius: 8px;
         padding: 12px 16px;
     }
+    div[data-testid="stMetric"] label {
+        color: #374151 !important;
+    }
+    div[data-testid="stMetric"] [data-testid="stMetricValue"] {
+        color: #111827 !important;
+    }
+    div[data-testid="stMetric"] [data-testid="stMetricDelta"] {
+        color: #4b5563 !important;
+    }
     div[data-testid="stExpander"] {
-        border: 1px solid rgba(255,255,255,0.06);
+        border: 1px solid #e5e7eb;
         border-radius: 8px;
     }
     .compliance-critical {
-        background: linear-gradient(135deg, #4a1a1a 0%, #2d1010 100%);
-        border-left: 4px solid #ff4444;
+        background: #fef2f2;
+        border-left: 4px solid #ef4444;
         padding: 12px 16px;
         border-radius: 4px;
         margin-bottom: 8px;
+        color: #1f2937;
     }
     .compliance-warning {
-        background: linear-gradient(135deg, #4a3a1a 0%, #2d2210 100%);
-        border-left: 4px solid #ffaa00;
+        background: #fffbeb;
+        border-left: 4px solid #f59e0b;
         padding: 12px 16px;
         border-radius: 4px;
         margin-bottom: 8px;
+        color: #1f2937;
     }
     .compliance-ok {
-        background: linear-gradient(135deg, #1a3a1a 0%, #102d10 100%);
-        border-left: 4px solid #00cc66;
+        background: #f0fdf4;
+        border-left: 4px solid #22c55e;
         padding: 12px 16px;
         border-radius: 4px;
         margin-bottom: 8px;
+        color: #1f2937;
+    }
+    .compliance-critical strong, .compliance-warning strong, .compliance-ok strong {
+        color: #111827;
+    }
+    .compliance-critical em, .compliance-warning em, .compliance-ok em {
+        color: #3b82f6;
     }
 </style>""", unsafe_allow_html=True)
 
@@ -650,7 +668,7 @@ if layer == "Company Profile":
             v1, v2, v3 = st.columns(3)
             v1.metric("Base Enterprise Value", f"${vi['base_enterprise_value_usd']:,.0f}")
             v2.metric("Health-Adjusted Value", f"${vi['health_adjusted_value_usd']:,.0f}", f"{vi['health_adjusted_multiplier']:.2f}x multiplier")
-            v3.metric("External Cost Pressure", f"${vi['external_cost_pressure_annual_usd']:,.0f}/yr", "Iran conflict + Ti prices", delta_color="inverse")
+            v3.metric("Projected External Pressure", f"${vi['external_cost_pressure_annual_usd']:,.0f}/yr", "If current conditions persist", delta_color="inverse")
 
     except Exception as e:
         st.warning(f"Health index not available: {e}")
@@ -836,11 +854,12 @@ elif layer == "1. Digital Twin Layer":
 
         # Cost impact callout
         cost = ehi['cost_impact_summary']
-        st.error(
-            f"**Iran Conflict Cost Impact:** +${cost['iran_conflict_annual_cost_increase_usd']:,.0f}/yr in energy & freight — "
-            f"**Titanium Price Surge:** +${cost['titanium_price_increase_annual_usd']:,.0f}/yr — "
-            f"**Total External Pressure:** ${cost['total_external_cost_pressure_usd']:,.0f}/yr "
-            f"(**{cost['pct_of_ebitda']}% of EBITDA**)"
+        st.warning(
+            f"**Projected 12-Month Impact (if current conditions persist):** "
+            f"Iran-driven energy & freight: +${cost['iran_conflict_annual_cost_increase_usd']:,.0f}/yr — "
+            f"Ti price pressure: +${cost['titanium_price_increase_annual_usd']:,.0f}/yr — "
+            f"**Total projected external pressure: ${cost['total_external_cost_pressure_usd']:,.0f}/yr "
+            f"({cost['pct_of_ebitda']}% of EBITDA)**"
         )
 
         # Detailed factor list
