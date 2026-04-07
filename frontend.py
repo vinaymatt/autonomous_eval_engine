@@ -976,7 +976,7 @@ elif layer == "2. Market Dynamics & Resilience":
         config.physics = custom_physics
         config.width = "100%"
         config.height = "850px"
-        setattr(config, "interaction", {"zoomView": False, "dragView": True})
+        setattr(config, "interaction", {"zoomView": True, "dragView": True})
         setattr(config, "edges", {
             "font": {"size": 11, "strokeWidth": 3, "strokeColor": "#ffffff"},
             "color": {"color": "#cccccc", "highlight": "#1a73e8"},
