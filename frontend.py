@@ -956,23 +956,32 @@ elif layer == "2. Market Dynamics & Resilience":
             for n in graph_data['nodes']
         ]
         edges = [
-            Edge(source=e['source'], target=e['target'], label=e['label'], length=350)
+            Edge(source=e['source'], target=e['target'], label=e['label'], length=500)
             for e in graph_data['edges']
         ]
 
         custom_physics = {
             "solver": "repulsion",
             "repulsion": {
-                "nodeDistance": 250,
-                "springLength": 450,
-                "springConstant": 0.015,
+                "nodeDistance": 350,
+                "springLength": 600,
+                "springConstant": 0.008,
+                "damping": 0.12,
+            },
+            "stabilization": {
+                "iterations": 200,
             },
         }
         config = Config(width=700, height=500, directed=True, hierarchical=False)
         config.physics = custom_physics
         config.width = "100%"
-        config.height = "750px"
+        config.height = "850px"
         setattr(config, "interaction", {"zoomView": False, "dragView": True})
+        setattr(config, "edges", {
+            "font": {"size": 11, "strokeWidth": 3, "strokeColor": "#ffffff"},
+            "color": {"color": "#cccccc", "highlight": "#1a73e8"},
+            "smooth": {"type": "curvedCW", "roundness": 0.15},
+        })
 
         clicked_node_id = agraph(nodes=nodes, edges=edges, config=config)  # type: ignore
 
@@ -1066,25 +1075,34 @@ elif layer == "3. Legal & Compliance Framework":
         for _, row in items_df.iterrows():
             fig.add_trace(go.Bar(
                 x=[row['days_until_expiry']],
-                y=[row['name'][:50]],
+                y=[row['name'][:45]],
                 orientation='h',
                 marker_color=row['color'],
-                text=f"{row['days_until_expiry']}d — {row['category']}",
+                text=f"{row['days_until_expiry']}d",
                 textposition='outside',
-                hovertext=f"{row['name']}<br>Issuer: {row['issuer']}<br>Expires: {row['expiry_date'].strftime('%b %d, %Y')}<br>{row['notes'][:120]}...",
+                hovertext=f"{row['name']}<br>Category: {row['category']}<br>Issuer: {row['issuer']}<br>Expires: {row['expiry_date'].strftime('%b %d, %Y')}<br>{row['notes'][:150]}...",
                 showlegend=False,
             ))
 
+        n_items = len(items_df)
         fig.update_layout(
             title="Days Until Expiry (from April 7, 2026)",
             xaxis_title="Days Remaining",
             yaxis=dict(autorange="reversed"),
-            height=500,
-            margin=dict(l=20, r=20, t=40, b=40),
-            xaxis=dict(range=[0, max(items_df['days_until_expiry']) + 50]),
+            height=max(400, n_items * 42 + 80),
+            margin=dict(l=20, r=60, t=60, b=40),
+            xaxis=dict(range=[0, max(items_df['days_until_expiry']) + 80]),
         )
-        fig.add_vline(x=60, line_dash="dash", line_color="#ff4444", annotation_text="60-day critical threshold")
-        fig.add_vline(x=135, line_dash="dash", line_color="#ffaa00", annotation_text="135-day warning threshold")
+        fig.add_vline(
+            x=60, line_dash="dash", line_color="#ef4444",
+            annotation_text="60d", annotation_position="top right",
+            annotation_font_size=10, annotation_font_color="#ef4444",
+        )
+        fig.add_vline(
+            x=135, line_dash="dash", line_color="#f59e0b",
+            annotation_text="135d", annotation_position="top right",
+            annotation_font_size=10, annotation_font_color="#f59e0b",
+        )
         st.plotly_chart(fig, use_container_width=True)
 
         # Detailed cards
