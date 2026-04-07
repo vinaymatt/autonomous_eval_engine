@@ -1,30 +1,70 @@
 {
   "entity": {
-    "id": "SMM-774",
-    "name": "Apex Machining Co.",
-    "industry": "Precision Manufacturing"
+    "id": "SMM-1247",
+    "name": "Hartwell Precision Manufacturing, Inc.",
+    "dba": "Hartwell Precision",
+    "industry": "Precision CNC Machining & Fabrication",
+    "naics_code": "332710",
+    "naics_description": "Machine Shops",
+    "founded": 1978,
+    "founder": "Robert E. Hartwell",
+    "owner_age": 72,
+    "succession_status": "No identified successor — owner plans full retirement by Q4 2027",
+    "address": "1840 Union Blvd, Allentown, PA 18109",
+    "county": "Lehigh",
+    "region": "Lehigh Valley",
+    "employees": 47,
+    "facility_sqft": 28000,
+    "annual_revenue_usd": 8200000,
+    "ebitda_usd": 1148000,
+    "ebitda_margin_pct": 14.0,
+    "certifications": ["ISO 9001:2015", "AS9100D", "ITAR Registered", "NADCAP (pending)"],
+    "key_markets": ["Defense / Aerospace", "Medical Devices", "Automotive / Drivetrain", "Industrial Equipment"]
   },
   "operational_core": {
     "digital_assets": {
-      "layout_3d_uri": "s3://demo-bucket/apex_layout.gltf",
-      "proprietary_cad_encrypted": true
+      "layout_3d_uri": "s3://aeeve-prod/hartwell/facility_scan_2026.gltf",
+      "proprietary_cad_encrypted": true,
+      "cad_files_count": 2847,
+      "encryption_method": "AES-256 content-based partial encryption",
+      "last_3d_scan": "2026-03-15T08:00:00Z"
     },
     "supply_chain_graph": {
-      "nodes": [
-        {"id": "Supplier_A", "type": "Raw Steel", "health_score": 0.91, "is_single_source": false},
-        {"id": "Supplier_B", "type": "Specialty Coatings", "health_score": 0.34, "is_single_source": true}
-      ],
-      "edges": [
-        {"source": "Supplier_A", "target": "SMM-774", "lead_time_days": 14},
-        {"source": "Supplier_B", "target": "SMM-774", "lead_time_days": 45}
-      ]
+      "total_suppliers": 18,
+      "total_customers": 8,
+      "single_source_risks": 3,
+      "avg_lead_time_days": 21.4
     }
   },
   "market_dynamics": {
     "dynamic_asset_valuation": {
-      "tangible_assets_usd": 4200000,
-      "intangible_assets_usd": 1850000,
-      "anchor_firm_stability_index": 0.68
+      "tangible_assets_usd": 3850000,
+      "machinery_equipment_usd": 2740000,
+      "real_estate_usd": 1110000,
+      "intangible_assets_usd": 2180000,
+      "customer_relationships_usd": 890000,
+      "process_knowhow_usd": 640000,
+      "patents_usd": 420000,
+      "workforce_in_place_usd": 230000,
+      "total_enterprise_value_usd": 6030000,
+      "anchor_firm_stability_index": 0.71,
+      "patent_count": 4,
+      "patent_details": [
+        "US Patent 9,415,223 — Micro-tolerance boring method for titanium alloys",
+        "US Patent 10,112,877 — Adaptive fixturing for thin-wall aerospace components",
+        "US Patent 10,890,441 — In-process vibration compensation for 5-axis milling",
+        "US Patent 11,203,556 — Coolant recovery and recycling system for CNC operations"
+      ]
+    },
+    "socioeconomic_impact_if_shutdown": {
+      "direct_jobs_lost": 47,
+      "indirect_jobs_at_risk": 134,
+      "annual_payroll_lost_usd": 2680000,
+      "annual_tax_revenue_lost_usd": 412000,
+      "downstream_customers_disrupted": 8,
+      "estimated_regional_gdp_impact_usd": 14600000,
+      "government_assistance_cost_usd": 890000,
+      "lehigh_valley_mfg_dependency_pct": 0.3
     }
   }
 }

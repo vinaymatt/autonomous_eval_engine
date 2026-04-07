@@ -1,6 +1,7 @@
 fastapi
 mangum
 numpy
+pandas
 pydantic
 scikit-learn
 uvicorn
