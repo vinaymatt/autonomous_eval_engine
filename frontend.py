@@ -124,13 +124,13 @@ if layer == "0. Welcome & Overview":
 
 # 1. OPERATIONAL CORE LAYER
 elif layer == "1. Digital Twin":
-    st.header("Digital Twin")
+    st.markdown('<p class="header-font">Digital Twin</p>', unsafe_allow_html=True)
     st.info("Constructing a precise digital replica to monitor physical assets.")
     
     col1, col2 = st.columns(2)
     
     with col1:
-        st.subheader("Live Production KPIs")
+        st.markdown('<p style="font-size: 24px; font-weight: bold;">Live Production KPIs</p>', unsafe_allow_html=True)
         if st.button("Fetch Live IoT Data"):
             try:
                 res = requests.get(api_url("/api/v1/operational/digital-twin/kpis"), timeout=2).json()
@@ -142,21 +142,21 @@ elif layer == "1. Digital Twin":
                 st.error("Could not fetch KPIs: Backend unreachable.")
     
     with col2:
-        st.subheader("Human Capital: Wage-Skill Plot")
+        st.markdown('<p style="font-size: 24px; font-weight: bold;">Human Capital: Wage-Skill Plot</p>', unsafe_allow_html=True)
         try:
             res = requests.get(api_url("/api/v1/operational/human-capital/wage-skill"), timeout=2).json()
             df = pd.DataFrame(res['nodes'])
             fig = px.scatter(df, x="skill_level", y="wage_usd_hr", size="flight_risk", 
                              color="flight_risk", hover_name="employee_id",
                              title="Workforce Vulnerability Assessment")
-            st.plotly_chart(fig, width='stretch')
+            st.plotly_chart(fig, use_container_width=True)
         except Exception as e:
             st.error("Could not fetch Workforce data.")
 
     # Show Digital Twin 3D Layout with IoT status
     st.markdown("---")
-    st.subheader("3D Facility Layout (Live IoT Status)")
-    st.write("Spatial mapping of physical assets and current operational health.")
+    st.markdown('<p style="font-size: 24px; font-weight: bold;">3D Facility Layout (Live IoT Status)</p>', unsafe_allow_html=True)
+    st.markdown('<p class="large-font">Spatial mapping of physical assets and current operational health.</p>', unsafe_allow_html=True)
     
     try:
         # Fetch the coordinates and status
@@ -203,7 +203,7 @@ elif layer == "1. Digital Twin":
 
 # 2. MARKET DYNAMICS LAYER
 elif layer == "2. Market Dynamics":
-    st.header("Market Dynamics & Resilience")
+    st.markdown('<p class="header-font">Market Dynamics & Resilience</p>', unsafe_allow_html=True)
     st.info("Quantifying non-linear economic shocks using Machine Learning.")
     
     # --- Module 2.1: Socio-Economic Impact ---
@@ -230,8 +230,8 @@ elif layer == "2. Market Dynamics":
     st.markdown("---")
 
     # --- Module 2.3: Supply Chain Resilience (FIXED INDENTATION) ---
-    st.subheader("Temporal Production Graph (GNN Analysis)")
-    st.write("Visualizing latent dependencies and hidden supplier failures.")
+    st.markdown('<p style="font-size: 24px; font-weight: bold;">Temporal Production Graph (GNN Analysis)</p>', unsafe_allow_html=True)
+    st.markdown('<p class="large-font">Visualizing latent dependencies and hidden supplier failures.</p>', unsafe_allow_html=True)
     
     try:
         graph_data = requests.get(api_url("/api/v1/operational/supply-chain/graph"), timeout=2).json()
@@ -286,24 +286,24 @@ elif layer == "2. Market Dynamics":
 
 # 3. LEGAL & DISCLOSURE LAYER
 elif layer == "3. Legal & Disclosure":
-    st.header("Legal & Disclosure Compliance")
+    st.markdown('<p class="header-font">Legal & Disclosure Compliance</p>', unsafe_allow_html=True)
     st.info("Operationalizing compliance for asset transfer.")
     
     col1, col2 = st.columns(2)
     with col1:
-        st.subheader("Ownership Rights (PA Title 15)")
+        st.markdown('<p style="font-size: 24px; font-weight: bold;">Ownership Rights (PA Title 15)</p>', unsafe_allow_html=True)
         try:
             res = requests.get(api_url("/api/v1/legal/compliance/ownership-rights"), timeout=2).json()
-            st.write(f"**Regulation:** {res['regulation']}")
-            st.write(f"**Status:** {res['liability_status']}")
+            st.markdown(f'<p class="large-font"><b>Regulation:</b> {res["regulation"]}</p>', unsafe_allow_html=True)
+            st.markdown(f'<p class="large-font"><b>Status:</b> {res["liability_status"]}</p>', unsafe_allow_html=True)
         except:
             st.error("Could not fetch legal data.")
         
     with col2:
-        st.subheader("Knowledge Disclosure (PA UTSA)")
+        st.markdown('<p style="font-size: 24px; font-weight: bold;">Knowledge Disclosure (PA UTSA)</p>', unsafe_allow_html=True)
         try:
             res = requests.get(api_url("/api/v1/legal/compliance/knowledge-disclosure"), timeout=2).json()
-            st.write(f"**CAD Encryption:** {'✅ Active' if res['cad_encryption_status'] else '❌ Inactive'}")
-            st.write(f"**Compliance:** {'Verified' if res['is_compliant'] else 'Attention Required'}")
+            st.markdown(f'<p class="large-font"><b>CAD Encryption:</b> {"✅ Active" if res["cad_encryption_status"] else "❌ Inactive"}</p>', unsafe_allow_html=True)
+            st.markdown(f'<p class="large-font"><b>Compliance:</b> {"Verified" if res["is_compliant"] else "Attention Required"}</p>', unsafe_allow_html=True)
         except:
             st.error("Could not fetch disclosure data.")
