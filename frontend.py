@@ -693,7 +693,7 @@ elif layer == "Company Profile":
 
     with col_title:
         st.header(f"{profile['name']}")
-    st.markdown(f"*{profile['address']}* — Founded {profile['founded']} — NAICS {profile['naics']}")
+        st.markdown(f"*{profile['address']}* — Founded {profile['founded']} — NAICS {profile['naics']}")
 
     with col_select:
         # Company selection (for demo, only one company is available)
