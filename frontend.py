@@ -78,7 +78,7 @@ if layer == "0. Welcome & Overview":
 
     # About US Section
     st.header("👥 About Us")
-    st.write("We are a team of PHD students and a professor from Lisa Lab of Industrial Engineering Department at Penn State University.")
+    st.write("We are a group of PHD students and a professor from Lisa Lab of Industrial Engineering Department at Penn State University.")
     
     # 4 columns for team members
     team_cols = st.columns(4)
