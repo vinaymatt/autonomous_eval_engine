@@ -267,4 +267,3 @@ def _build_compliance_items():
         item["days_until_expiry"] = d
 
     return items
-

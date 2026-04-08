@@ -7,6 +7,7 @@ import plotly.graph_objects as go
 import streamlit.components.v1 as components
 from streamlit_agraph import agraph, Node, Edge, Config
 import os
+import base64
 
 try:
     api_base_url = st.secrets["API_BASE_URL"]
@@ -17,6 +18,17 @@ api_base_url = api_base_url.rstrip("/")
 
 def api_url(path: str) -> str:
     return f"{api_base_url}{path}"
+
+# Helper function to display local images with a fixed size
+def get_image_as_base64(path):
+    try:
+        if os.path.exists(path):
+            with open(path, "rb") as f:
+                data = f.read()
+            return f"data:image/jpeg;base64,{base64.b64encode(data).decode()}"
+    except Exception:
+        return None
+    return None
 
 
 st.set_page_config(
@@ -564,7 +576,7 @@ animate();
 # ════════════════════════════════════════════════════════════════════════════
 #  HEADER
 # ════════════════════════════════════════════════════════════════════════════
-st.title("AEEVE — Autonomous Enterprise Evaluation Engine")
+st.title("🛡️ Autonomous Enterprise Evaluation & Visualization Engine")
 st.caption("Keystone Future Factories Initiative (KFFI) — Preventing cascading economic failures from manufacturing succession gaps")
 st.markdown("---")
 
@@ -573,7 +585,8 @@ st.sidebar.image("https://img.icons8.com/ios-filled/50/ffffff/factory.png", widt
 st.sidebar.header("AEEVE Navigation")
 layer = st.sidebar.radio(
     "Select Module",
-    [
+    [   
+        "Welcome & Overview",
         "Company Profile",
         "1. Digital Twin Layer",
         "2. Market Dynamics & Resilience",
@@ -582,9 +595,73 @@ layer = st.sidebar.radio(
 )
 
 # ════════════════════════════════════════════════════════════════════════════
+#  Welcome & Overview
+# ════════════════════════════════════════════════════════════════════════════
+if layer == "Welcome & Overview":
+  
+    # Goal Section
+    st.markdown('<p class="header-font">🎯 Our Mission</p>', unsafe_allow_html=True)
+    col_goal_text, col_goal_img = st.columns([1.2, 1])
+    with col_goal_text:
+        st.markdown("""
+            <p class="large-font">
+            Our goal is to revolutionize the evaluation and digitization of Small and Medium Manufacturing (SMM) enterprises. 
+            By leveraging advanced AI, Graph Neural Networks, and Digital Twin technology, we transform opaque industrial 
+            assets into transparent, data-driven insights. Our platform enables seamless asset transfer, 
+            valuation accuracy, and operational resilience for the next generation of manufacturing.
+            </p>
+        """, unsafe_allow_html=True)
+    with col_goal_img:
+        # Use local image if available, else placeholder
+        goal_img_path = "assets/images/front.jpg"
+        img_b64 = get_image_as_base64(goal_img_path)
+        if img_b64:
+            st.markdown(f'<img src="{img_b64}" class="goal-img" alt="Industrial Innovation">', unsafe_allow_html=True)
+        else:
+            st.image("https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=400", caption="Industrial Innovation (Placeholder)")
+
+    st.markdown("---")
+
+    # About US Section
+    st.markdown('<p class="header-font">👥 About Us</p>', unsafe_allow_html=True)
+    st.markdown('<p class="large-font">We are a group of PHD students and a professor from Lisa Lab of Industrial Engineering Department at Penn State University.</p>', unsafe_allow_html=True)
+    
+    # 4 columns for team members
+    team_cols = st.columns(4)
+    team_members = [
+        {"name": "Soundar Kumara", "email": "Skumara@psu.edu", "img": "assets/images/team1.jpg"},
+        {"name": "Xiaowen You", "email": "xxy5196@psu.edu", "img": "assets/images/team2.jpg"},
+        {"name": "Dyutimoy Das", "email": "dnd5258@psu.edu", "img": "assets/images/team3.jpeg"},
+        {"name": "Vinay Mathew", "email": "vinaysmathew@psu.edu​", "img": "assets/images/team4.jpg"},
+    ]
+    
+    for i, member in enumerate(team_members):
+        with team_cols[i]:
+            img_b64 = get_image_as_base64(member["img"])
+            if img_b64:
+                st.markdown(f'<img src="{img_b64}" class="team-img" alt="{member["name"]}">', unsafe_allow_html=True)
+            else:
+                st.image("https://via.placeholder.com/150", width=150, caption="(Image missing)")
+            st.markdown(f'<p style="font-size: 18px; font-weight: bold; margin-bottom: 0px;">{member["name"]}</p>', unsafe_allow_html=True)
+            st.markdown(f'<p style="font-size: 16px;">📧 {member["email"]}</p>', unsafe_allow_html=True)
+
+    st.markdown("---")
+    st.markdown('<p class="header-font">🚀 Our Strategic Impact</p>', unsafe_allow_html=True)
+    st.markdown("""
+        <p class="large-font">
+        This initiative aims to counter the economic threat posed by retiring business owners by automating the 
+        evaluation and transfer of legacy firms. By constructing a digital twin that visualizes machinery, workflows, 
+        and hidden supply chain dependencies, we eliminate the information asymmetry that often forces 
+        liquidation. This system transforms an opaque, risky transaction into a transparent, data-driven acquisition. 
+        Ultimately, AEEVE preserves critical institutions and prevents the cascading economic failure that occurs 
+        when a viable company shuts down simply because it cannot find a successor.
+        </p>
+    """, unsafe_allow_html=True)
+
+# ════════════════════════════════════════════════════════════════════════════
 #  COMPANY PROFILE
 # ════════════════════════════════════════════════════════════════════════════
-if layer == "Company Profile":
+elif layer == "Company Profile":
     try:
         profile = requests.get(api_url("/api/v1/operational/company-profile")).json()
     except Exception:
