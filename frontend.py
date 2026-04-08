@@ -708,8 +708,8 @@ elif layer == "Company Profile":
 
     # Top-level metrics
     c1, c2, c3, c4, c5 = st.columns(5)
-    c1.metric("Annual Revenue", f"${profile['annual_revenue_usd']:,.0f}")
-    c2.metric("EBITDA", f"${profile['ebitda_usd']:,.0f}", f"{profile['ebitda_margin_pct']}% margin")
+    c1.metric("Annual Revenue", f"${profile['annual_revenue_usd']:,.0f}", help="Total income from goods sold or services rendered in the most recent fiscal year.")
+    c2.metric("EBITDA", f"${profile['ebitda_usd']:,.0f}", f"{profile['ebitda_margin_pct']}% margin", help="Earnings Before Interest, Taxes, Depreciation & Amortization — a measure of core operating profitability.")
     c3.metric("Employees", profile['employees'])
     c4.metric("Facility", f"{profile['facility_sqft']:,} sq ft")
     c5.metric("Owner Age", profile['owner_age'], "Retirement planned Q4 2027")
@@ -742,9 +742,9 @@ elif layer == "Company Profile":
     st.markdown("---")
     st.subheader("Projected Socioeconomic Impact if Firm Shuts Down")
     ic1, ic2, ic3, ic4 = st.columns(4)
-    ic1.metric("Direct Jobs Lost", "47")
-    ic2.metric("Indirect Jobs at Risk", "134")
-    ic3.metric("Regional GDP Impact", "$14.6M")
+    ic1.metric("Direct Jobs Lost", "47", help="Employees directly on the firm's payroll.")
+    ic2.metric("Indirect Jobs at Risk", "134", help="Jobs at suppliers, service providers, and local businesses that depend on this firm's activity.")
+    ic3.metric("Regional GDP Impact", "$14.6M", help="Gross Domestic Product — total economic output lost in the region, including multiplier effects.")
     ic4.metric("Govt. Assistance Cost", "$890K", "Unemployment, retraining, aid")
 
     # ── Enterprise Health Index (top-level) ────────────────────────────────
@@ -760,15 +760,16 @@ elif layer == "Company Profile":
 
         eh1, eh2, eh3 = st.columns(3)
 
+        ehi_help = "Weighted composite of internal (assets, workforce) and external (market, geopolitical) health scores."
         if score >= 0.75:
-            eh1.metric("Enterprise Health", f"{score:.1%}", "Healthy")
+            eh1.metric("Enterprise Health", f"{score:.1%}", "Healthy", help=ehi_help)
         elif score >= 0.55:
-            eh1.metric("Enterprise Health", f"{score:.1%}", "Fair — headwinds present")
+            eh1.metric("Enterprise Health", f"{score:.1%}", "Fair — headwinds present", help=ehi_help)
         else:
-            eh1.metric("Enterprise Health", f"{score:.1%}", "At Risk", delta_color="inverse")
+            eh1.metric("Enterprise Health", f"{score:.1%}", "At Risk", delta_color="inverse", help=ehi_help)
 
-        eh2.metric("Internal Health", f"{int_score:.1%}", "Machinery, workforce, process")
-        eh3.metric("External Health", f"{ext_score:.1%}", "Supply chain, market, geopolitical")
+        eh2.metric("Internal Health", f"{int_score:.1%}", "Machinery, workforce, process", help="Score based on machine condition, workforce stability, and process maturity inside the firm.")
+        eh3.metric("External Health", f"{ext_score:.1%}", "Supply chain, market, geopolitical", help="Score based on supplier resilience, customer concentration, and macro/geopolitical risk factors.")
 
         st.progress(score, text=f"Enterprise Health Index: {score:.1%} ({ehi['weighting']})")
         st.markdown(f"**Assessment:** {ehi['assessment']}")
@@ -776,9 +777,9 @@ elif layer == "Company Profile":
         if 'valuation_implications' in ehi:
             vi = ehi['valuation_implications']
             v1, v2, v3 = st.columns(3)
-            v1.metric("Base Enterprise Value", f"${vi['base_enterprise_value_usd']:,.0f}")
-            v2.metric("Health-Adjusted Value", f"${vi['health_adjusted_value_usd']:,.0f}", f"{vi['health_adjusted_multiplier']:.2f}x multiplier")
-            v3.metric("Projected External Pressure", f"${vi['external_cost_pressure_annual_usd']:,.0f}/yr", "If current conditions persist", delta_color="inverse")
+            v1.metric("Base Enterprise Value", f"${vi['base_enterprise_value_usd']:,.0f}", help="Estimated total value of the firm (assets + goodwill) before adjusting for health risks.")
+            v2.metric("Health-Adjusted Value", f"${vi['health_adjusted_value_usd']:,.0f}", f"{vi['health_adjusted_multiplier']:.2f}x multiplier", help="Enterprise value after applying the health index multiplier to account for internal/external risks.")
+            v3.metric("Projected External Pressure", f"${vi['external_cost_pressure_annual_usd']:,.0f}/yr", "If current conditions persist", delta_color="inverse", help="Additional annual costs the firm faces from supply-chain disruptions, energy prices, and geopolitical factors.")
 
     except Exception as e:
         st.warning(f"Health index not available: {e}")
@@ -799,12 +800,12 @@ elif layer == "1. Digital Twin Layer":
     try:
         res = requests.get(api_url("/api/v1/operational/digital-twin/kpis")).json()
         k1, k2, k3, k4, k5, k6 = st.columns(6)
-        k1.metric("Machine Utilization", f"{res['machine_utilization_pct']}%")
-        k2.metric("Throughput", f"{res['production_throughput_units_per_hr']} units/hr")
-        k3.metric("OEE", f"{res['overall_equipment_effectiveness_pct']}%")
-        k4.metric("Scrap Rate", f"{res['scrap_rate_pct']}%")
+        k1.metric("Machine Utilization", f"{res['machine_utilization_pct']}%", help="Percentage of scheduled production time that machines are actually running.")
+        k2.metric("Throughput", f"{res['production_throughput_units_per_hr']} units/hr", help="Number of finished parts produced per hour across the shop floor.")
+        k3.metric("OEE", f"{res['overall_equipment_effectiveness_pct']}%", help="Overall Equipment Effectiveness — Availability × Performance × Quality. World-class target is ≥ 85%.")
+        k4.metric("Scrap Rate", f"{res['scrap_rate_pct']}%", help="Percentage of produced parts that fail inspection and must be discarded or reworked.")
         k5.metric("Machines Online", f"{res['machines_online']}/{res['machines_total']}")
-        k6.metric("On-Time Delivery", f"{res['on_time_delivery_pct']}%")
+        k6.metric("On-Time Delivery", f"{res['on_time_delivery_pct']}%", help="Percentage of customer orders shipped by the promised date.")
 
         if res['anomaly_detected']:
             st.error(f"**Anomaly Detected:** {res.get('anomaly_detail', 'Unknown anomaly')}")
@@ -838,9 +839,9 @@ elif layer == "1. Digital Twin Layer":
         # Summary metrics
         h1, h2, h3, h4 = st.columns(4)
         h1.metric("Total Workforce", summary['total_employees'])
-        h2.metric("Avg. Tenure", f"{summary['avg_tenure_years']} yrs")
-        h3.metric("High Flight Risk", summary['high_flight_risk_count'], "Would leave within 6 months of ownership change")
-        h4.metric("Need Govt. Assistance", summary['employees_needing_govt_assistance_if_shutdown'], "If firm shuts down")
+        h2.metric("Avg. Tenure", f"{summary['avg_tenure_years']} yrs", help="Mean number of years employees have worked at this firm.")
+        h3.metric("High Flight Risk", summary['high_flight_risk_count'], "Would leave within 6 months of ownership change", help="Employees with > 60% probability of quitting if ownership changes — typically senior, highly skilled staff.")
+        h4.metric("Need Govt. Assistance", summary['employees_needing_govt_assistance_if_shutdown'], "If firm shuts down", help="Workers whose skills and wages make them likely to require unemployment benefits or retraining programs.")
 
         fig = px.scatter(
             df,
@@ -894,11 +895,11 @@ elif layer == "1. Digital Twin Layer":
         # Summary
         ms = ihi['machinery_summary']
         ih1, ih2, ih3, ih4, ih5 = st.columns(5)
-        ih1.metric("Composite Internal Health", f"{ihi['composite_internal_health_index']:.1%}")
+        ih1.metric("Composite Internal Health", f"{ihi['composite_internal_health_index']:.1%}", help="Weighted average of all machine condition scores, factoring in runtime, MTBF, and maintenance history.")
         ih2.metric("Machines Assessed", ms['total_machines_assessed'])
-        ih3.metric("Replacement Cost", f"${ms['total_replacement_cost_usd']:,.0f}")
-        ih4.metric("Book Value", f"${ms['total_book_value_usd']:,.0f}")
-        ih5.metric("Depreciation Gap", f"${ms['depreciation_gap_usd']:,.0f}")
+        ih3.metric("Replacement Cost", f"${ms['total_replacement_cost_usd']:,.0f}", help="Estimated cost to purchase equivalent new machines at today's market prices.")
+        ih4.metric("Book Value", f"${ms['total_book_value_usd']:,.0f}", help="Current accounting value of all machinery after accumulated depreciation.")
+        ih5.metric("Depreciation Gap", f"${ms['depreciation_gap_usd']:,.0f}", help="Difference between replacement cost and book value — indicates how much value has been written down on paper.")
 
         if ms['critical_issues'] > 0:
             st.error(f"**{ms['critical_issues']} critical issue(s)** and **{ms['warning_issues']} warning(s)** across fleet")
@@ -954,13 +955,18 @@ elif layer == "1. Digital Twin Layer":
         ehi = requests.get(api_url("/api/v1/operational/health-index/external")).json()
 
         # Top-level scores
+        ext_help = {
+            "supply_chain_resilience": "How well the firm can absorb supplier disruptions — single-source risks, lead times, and alternative sourcing options.",
+            "customer_stability": "Revenue concentration risk — how dependent the firm is on a few key customers.",
+            "geopolitical_macro": "Exposure to global events (conflicts, tariffs, sanctions) that affect energy, freight, and material costs.",
+        }
         ex1, ex2, ex3, ex4 = st.columns(4)
-        ex1.metric("Composite External Health", f"{ehi['composite_external_health_index']:.1%}")
+        ex1.metric("Composite External Health", f"{ehi['composite_external_health_index']:.1%}", help="Weighted blend of supply-chain, customer, and geopolitical risk scores.")
 
         for cat_name, cat_label in [("supply_chain_resilience", "Supply Chain"), ("customer_stability", "Customer Stability"), ("geopolitical_macro", "Geopolitical / Macro")]:
             cat = ehi['categories'][cat_name]
             col = {"supply_chain_resilience": ex2, "customer_stability": ex3, "geopolitical_macro": ex4}[cat_name]
-            col.metric(cat_label, f"{cat['score']:.1%}")
+            col.metric(cat_label, f"{cat['score']:.1%}", help=ext_help[cat_name])
 
         # Cost impact callout
         cost = ehi['cost_impact_summary']
@@ -1040,9 +1046,9 @@ elif layer == "2. Market Dynamics & Resilience":
                     st.markdown("**Projected Regional Impact if Firm Exits:**")
                     sei = res['socioeconomic_impact']
                     s1, s2, s3 = st.columns(3)
-                    s1.metric("Direct + Indirect Jobs", f"{sei['direct_jobs_lost'] + sei['indirect_jobs_at_risk']}")
-                    s2.metric("Regional GDP Impact", f"${sei['estimated_regional_gdp_impact_usd']:,.0f}")
-                    s3.metric("Payroll + Tax Revenue Lost", f"${sei['annual_payroll_lost_usd'] + sei['annual_tax_revenue_lost_usd']:,.0f}/yr")
+                    s1.metric("Direct + Indirect Jobs", f"{sei['direct_jobs_lost'] + sei['indirect_jobs_at_risk']}", help="Sum of on-payroll employees plus estimated jobs at suppliers and local businesses tied to this firm.")
+                    s2.metric("Regional GDP Impact", f"${sei['estimated_regional_gdp_impact_usd']:,.0f}", help="Estimated loss to regional Gross Domestic Product, including economic multiplier effects.")
+                    s3.metric("Payroll + Tax Revenue Lost", f"${sei['annual_payroll_lost_usd'] + sei['annual_tax_revenue_lost_usd']:,.0f}/yr", help="Combined annual wages and local/state tax revenue that would disappear if the firm closes.")
             except Exception as e:
                 st.error(f"Prediction failed: {e}")
 
@@ -1102,7 +1108,7 @@ elif layer == "2. Market Dynamics & Resilience":
             val_res = requests.get(api_url(f"/api/v1/market/valuation/{clicked_node_id}")).json()
 
             st.sidebar.markdown(f"**{val_res.get('name', clicked_node_id)}**")
-            st.sidebar.metric("Stability Index", val_res['stability_index'])
+            st.sidebar.metric("Stability Index", val_res['stability_index'], help="0–1 score reflecting the node's resilience to disruption within the supply chain network.")
 
             if val_res.get('intangible_value_usd'):
                 st.sidebar.write(f"**Intangible Assets (ML):** ${val_res['intangible_value_usd']:,}")
@@ -1168,10 +1174,10 @@ elif layer == "3. Legal & Compliance Framework":
 
         # Summary metrics
         m1, m2, m3, m4 = st.columns(4)
-        m1.metric("Total Tracked Items", comp['total_items'])
-        m2.metric("Critical (< 60 days)", comp['critical_count'], delta_color="inverse" if comp['critical_count'] > 0 else "off")
-        m3.metric("Warning (60-135 days)", comp['warning_count'])
-        m4.metric("OK (> 135 days)", comp['ok_count'])
+        m1.metric("Total Tracked Items", comp['total_items'], help="Licenses, certifications, and registrations that must remain active for the firm to operate legally.")
+        m2.metric("Critical (< 60 days)", comp['critical_count'], delta_color="inverse" if comp['critical_count'] > 0 else "off", help="Items expiring within 60 days — renewal or transfer must begin immediately.")
+        m3.metric("Warning (60-135 days)", comp['warning_count'], help="Items expiring in 60–135 days — action should be planned soon.")
+        m4.metric("OK (> 135 days)", comp['ok_count'], help="Items with more than 135 days before expiry — no immediate action required.")
 
         # Timeline visualization
         items_df = pd.DataFrame(comp['items'])
@@ -1286,15 +1292,16 @@ elif layer == "3. Legal & Compliance Framework":
             # Cybersecurity / CMMC
             cyber = kd['cybersecurity_compliance']
             st.markdown(f"**{cyber['governing_regulation']}**")
-            st.markdown(f"CMMC Level: **{cyber['cmmc_level']}**")
+            st.markdown(f"CMMC Level: **{cyber['cmmc_level']}**  \n*(Cybersecurity Maturity Model Certification — required for DoD contract eligibility)*")
 
             score = cyber['nist_sp_800_171_score']
             max_score = cyber['nist_sp_800_171_max']
             pct = score / max_score * 100
             st.progress(pct / 100, text=f"NIST SP 800-171 Score: {score}/{max_score} ({pct:.0f}%)")
+            st.caption("NIST SP 800-171: federal standard for protecting Controlled Unclassified Information (CUI).")
 
             if cyber['poa_m_items_open'] > 0:
-                st.warning(f"**{cyber['poa_m_items_open']} POA&M items open** — {cyber['status']}")
+                st.warning(f"**{cyber['poa_m_items_open']} POA&M items open** — {cyber['status']}  \n*(POA&M = Plan of Action & Milestones — tracked remediation items for cybersecurity gaps)*")
 
             st.markdown("---")
 
