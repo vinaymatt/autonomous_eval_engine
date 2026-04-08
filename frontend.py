@@ -4,6 +4,7 @@ import pandas as pd
 import plotly.express as px
 from streamlit_agraph import agraph, Node, Edge, Config
 import os
+import base64
 
 api_base_url = st.secrets.get("API_BASE_URL", os.getenv("API_BASE_URL", "http://localhost:8000")).rstrip("/")
 
@@ -11,8 +12,38 @@ api_base_url = st.secrets.get("API_BASE_URL", os.getenv("API_BASE_URL", "http://
 def api_url(path: str) -> str:
     return f"{api_base_url}{path}"
 
+# Helper function to display local images with a fixed size
+def get_image_as_base64(path):
+    try:
+        if os.path.exists(path):
+            with open(path, "rb") as f:
+                data = f.read()
+            return f"data:image/jpeg;base64,{base64.b64encode(data).decode()}"
+    except Exception:
+        return None
+    return None
+
 # Set page config for a professional look
 st.set_page_config(page_title="SMM Evaluation Engine", layout="wide")
+
+# Custom CSS for uniform image sizing
+st.markdown("""
+    <style>
+    .team-img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+    .goal-img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 15px;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 st.title("🛡️ Autonomous Enterprise Evaluation & Visualization Engine")
 st.markdown("---")
@@ -36,9 +67,10 @@ if layer == "0. Welcome & Overview":
         """)
     with col_goal_img:
         # Use local image if available, else placeholder
-        goal_img_path = "assets/images/goal_hero.jpg"
-        if os.path.exists(goal_img_path):
-            st.image(goal_img_path, caption="Industrial Innovation")
+        goal_img_path = "assets/images/front.jpg"
+        img_b64 = get_image_as_base64(goal_img_path)
+        if img_b64:
+            st.markdown(f'<img src="{img_b64}" class="goal-img" alt="Industrial Innovation">', unsafe_allow_html=True)
         else:
             st.image("https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=400", caption="Industrial Innovation (Placeholder)")
 
@@ -46,7 +78,7 @@ if layer == "0. Welcome & Overview":
 
     # About US Section
     st.header("👥 About Us")
-    st.write("We are a team of dedicated professionals committed to industrial digital transformation.")
+    st.write("We are a team of PHD students and a professor from Lisa Lab of Industrial Engineering Department at Penn State University.")
     
     # 4 columns for team members
     team_cols = st.columns(4)
@@ -59,20 +91,23 @@ if layer == "0. Welcome & Overview":
     
     for i, member in enumerate(team_members):
         with team_cols[i]:
-            if os.path.exists(member["img"]):
-                st.image(member["img"], width=150)
+            img_b64 = get_image_as_base64(member["img"])
+            if img_b64:
+                st.markdown(f'<img src="{img_b64}" class="team-img" alt="{member["name"]}">', unsafe_allow_html=True)
             else:
-                st.image("https://via.placeholder.com/150", width=150, caption="(Upload image to assets/images/)")
+                st.image("https://via.placeholder.com/150", width=150, caption="(Image missing)")
             st.write(f"**{member['name']}**")
             st.write(f"📧 {member['email']}")
 
     st.markdown("---")
-    st.header("🚀 Our Goals")
+    st.header("🚀 Our Strategic Impact")
     st.write("""
-        - **Digitization:** Creating precise digital replicas of physical manufacturing facilities.
-        - **Resilience:** Using Machine Learning to predict and mitigate supply chain and market risks.
-        - **Compliance:** Ensuring legal and disclosure standards are met for secure asset transfers.
-        - **Innovation:** Bridging the gap between traditional manufacturing and Industry 4.0.
+        This initiative aims to counter the economic threat posed by retiring business owners by automating the 
+        evaluation and transfer of legacy firms. By constructing a digital twin that visualizes machinery, workflows, 
+        and hidden supply chain dependencies, we eliminate the information asymmetry that often forces 
+        liquidation. This system transforms an opaque, risky transaction into a transparent, data-driven acquisition. 
+        Ultimately, AEEVE preserves critical institutions and prevents the cascading economic failure that occurs 
+        when a viable company shuts down simply because it cannot find a successor.
     """)
 
 # 1. OPERATIONAL CORE LAYER

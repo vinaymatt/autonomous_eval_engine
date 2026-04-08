@@ -118,7 +118,7 @@ The application uses local images for the "About Us" and "Goals" sections. To up
 
 1.  Add your images to the `assets/images/` directory.
 2.  The following filenames are expected:
-    -   `goal_hero.jpg`: Main goal section image.
+    -   `front.jpg`: Main goal section image.
     -   `team1.jpg`, `team2.jpg`, `team3.jpg`, `team4.jpg`: Profile pictures for team members.
 3.  Commit and push the images to GitHub:
     ```bash
