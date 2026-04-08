@@ -90,6 +90,27 @@ st.markdown("""<style>
     .compliance-critical em, .compliance-warning em, .compliance-ok em {
         color: #3b82f6;
     }
+    .team-img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+    .goal-img {
+        width: 100%;
+        height: 500px;
+        object-fit: cover;
+        border-radius: 15px;
+    }
+    .large-font {
+        font-size: 22px !important;
+        line-height: 1.6 !important;
+    }
+    .header-font {
+        font-size: 32px !important;
+        font-weight: bold !important;
+    }
 </style>""", unsafe_allow_html=True)
 
 
@@ -586,7 +607,7 @@ st.sidebar.header("AEEVE Navigation")
 layer = st.sidebar.radio(
     "Select Module",
     [   
-        "Welcome & Overview",
+        "Overview & Mission",
         "Company Profile",
         "1. Digital Twin Layer",
         "2. Market Dynamics & Resilience",
@@ -597,7 +618,7 @@ layer = st.sidebar.radio(
 # ════════════════════════════════════════════════════════════════════════════
 #  Welcome & Overview
 # ════════════════════════════════════════════════════════════════════════════
-if layer == "Welcome & Overview":
+if layer == "Overview & Mission":
   
     # Goal Section
     st.markdown('<p class="header-font">🎯 Our Mission</p>', unsafe_allow_html=True)
