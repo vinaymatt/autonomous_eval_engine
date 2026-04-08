@@ -112,6 +112,21 @@ So your endpoint example becomes:
 
 - `https://<your-netlify-site>.netlify.app/api/api/v1/operational/digital-twin/kpis`
 
+## 🖼️ Assets & Images
+
+The application uses local images for the "About Us" and "Goals" sections. To update these:
+
+1.  Add your images to the `assets/images/` directory.
+2.  The following filenames are expected:
+    -   `goal_hero.jpg`: Main goal section image.
+    -   `team1.jpg`, `team2.jpg`, `team3.jpg`, `team4.jpg`: Profile pictures for team members.
+3.  Commit and push the images to GitHub:
+    ```bash
+    git add assets/images/
+    git commit -m "Add team and goal images"
+    git push origin main
+    ```
+
 ## 🏗 Project Structure
 
 ```text

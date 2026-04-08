@@ -23,10 +23,9 @@ layer = st.sidebar.radio("Select Layer", ["0. Welcome & Overview", "1. Digital T
 
 # 0. WELCOME & OVERVIEW LAYER
 if layer == "0. Welcome & Overview":
-    st.header("Welcome to the SMM Evaluation Engine")
-    
+  
     # Goal Section
-    st.subheader("🎯 Our Mission")
+    st.header("🎯 Our Mission")
     col_goal_text, col_goal_img = st.columns([2, 1])
     with col_goal_text:
         st.write("""
@@ -36,26 +35,34 @@ if layer == "0. Welcome & Overview":
             valuation accuracy, and operational resilience for the next generation of manufacturing.
         """)
     with col_goal_img:
-        st.image("https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=400", caption="Industrial Innovation")
+        # Use local image if available, else placeholder
+        goal_img_path = "assets/images/goal_hero.jpg"
+        if os.path.exists(goal_img_path):
+            st.image(goal_img_path, caption="Industrial Innovation")
+        else:
+            st.image("https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=400", caption="Industrial Innovation (Placeholder)")
 
     st.markdown("---")
 
     # About US Section
-    st.subheader("👥 About Us")
+    st.header("👥 About Us")
     st.write("We are a team of dedicated professionals committed to industrial digital transformation.")
     
     # 4 columns for team members
     team_cols = st.columns(4)
     team_members = [
-        {"name": "Team Member 1", "email": "member1@example.com", "img": "https://via.placeholder.com/150"},
-        {"name": "Team Member 2", "email": "member2@example.com", "img": "https://via.placeholder.com/150"},
-        {"name": "Team Member 3", "email": "member3@example.com", "img": "https://via.placeholder.com/150"},
-        {"name": "Team Member 4", "email": "member4@example.com", "img": "https://via.placeholder.com/150"},
+        {"name": "Soundar Kumara", "email": "Skumara@psu.edu", "img": "assets/images/team1.jpg"},
+        {"name": "Xiaowen You", "email": "xxy5196@psu.edu", "img": "assets/images/team2.jpg"},
+        {"name": "Dyutimoy Das", "email": "dnd5258@psu.edu", "img": "assets/images/team3.jpeg"},
+        {"name": "Vinay Mathew", "email": "vinaysmathew@psu.edu​", "img": "assets/images/team4.jpg"},
     ]
     
     for i, member in enumerate(team_members):
         with team_cols[i]:
-            st.image(member["img"], width=150)
+            if os.path.exists(member["img"]):
+                st.image(member["img"], width=150)
+            else:
+                st.image("https://via.placeholder.com/150", width=150, caption="(Upload image to assets/images/)")
             st.write(f"**{member['name']}**")
             st.write(f"📧 {member['email']}")
 
@@ -78,20 +85,26 @@ elif layer == "1. Digital Twin":
     with col1:
         st.subheader("Live Production KPIs")
         if st.button("Fetch Live IoT Data"):
-            res = requests.get(api_url("/api/v1/operational/digital-twin/kpis")).json()
-            st.metric("Machine Utilization", f"{res['machine_utilization_pct']}%")
-            st.metric("Throughput (Units/Hr)", res['production_throughput_units_per_hr'])
-            if res['anomaly_detected']:
-                st.error("⚠️ Anomaly Detected in Facility Layout")
+            try:
+                res = requests.get(api_url("/api/v1/operational/digital-twin/kpis"), timeout=2).json()
+                st.metric("Machine Utilization", f"{res['machine_utilization_pct']}%")
+                st.metric("Throughput (Units/Hr)", res['production_throughput_units_per_hr'])
+                if res['anomaly_detected']:
+                    st.error("⚠️ Anomaly Detected in Facility Layout")
+            except Exception as e:
+                st.error("Could not fetch KPIs: Backend unreachable.")
     
     with col2:
         st.subheader("Human Capital: Wage-Skill Plot")
-        res = requests.get(api_url("/api/v1/operational/human-capital/wage-skill")).json()
-        df = pd.DataFrame(res['nodes'])
-        fig = px.scatter(df, x="skill_level", y="wage_usd_hr", size="flight_risk", 
-                         color="flight_risk", hover_name="employee_id",
-                         title="Workforce Vulnerability Assessment")
-        st.plotly_chart(fig, width='stretch')
+        try:
+            res = requests.get(api_url("/api/v1/operational/human-capital/wage-skill"), timeout=2).json()
+            df = pd.DataFrame(res['nodes'])
+            fig = px.scatter(df, x="skill_level", y="wage_usd_hr", size="flight_risk", 
+                             color="flight_risk", hover_name="employee_id",
+                             title="Workforce Vulnerability Assessment")
+            st.plotly_chart(fig, width='stretch')
+        except Exception as e:
+            st.error("Could not fetch Workforce data.")
 
     # Show Digital Twin 3D Layout with IoT status
     st.markdown("---")
@@ -100,7 +113,7 @@ elif layer == "1. Digital Twin":
     
     try:
         # Fetch the coordinates and status
-        layout_res = requests.get(api_url("/api/v1/operational/digital-twin/layout-3d")).json()
+        layout_res = requests.get(api_url("/api/v1/operational/digital-twin/layout-3d"), timeout=2).json()
         df_3d = pd.DataFrame(layout_res['machines'])
 
         # Hardcode the colors so "Downtime" is always red, etc.
@@ -154,15 +167,18 @@ elif layer == "2. Market Dynamics":
         demand = st.slider("Market Demand Trend", -1.0, 1.0, 0.1)
         
         if st.button("Predict Exit Probability"):
-            payload = {
-                "liquidity_ratio": l_ratio,
-                "debt_to_equity": d_equity,
-                "employee_turnover": turnover,
-                "market_demand_trend": demand
-            }
-            res = requests.post(api_url("/api/v1/market/predict-exit"), json=payload).json()
-            st.warning(f"Exit Probability: {res['exit_probability']:.2%}")
-            st.write(f"**Recommendation:** {res['recommendation']}")
+            try:
+                payload = {
+                    "liquidity_ratio": l_ratio,
+                    "debt_to_equity": d_equity,
+                    "employee_turnover": turnover,
+                    "market_demand_trend": demand
+                }
+                res = requests.post(api_url("/api/v1/market/predict-exit"), json=payload, timeout=2).json()
+                st.warning(f"Exit Probability: {res['exit_probability']:.2%}")
+                st.write(f"**Recommendation:** {res['recommendation']}")
+            except Exception as e:
+                st.error("Prediction service unavailable.")
 
     st.markdown("---")
 
@@ -171,7 +187,7 @@ elif layer == "2. Market Dynamics":
     st.write("Visualizing latent dependencies and hidden supplier failures.")
     
     try:
-        graph_data = requests.get(api_url("/api/v1/operational/supply-chain/graph")).json()
+        graph_data = requests.get(api_url("/api/v1/operational/supply-chain/graph"), timeout=2).json()
 
         nodes = [Node(id=n['id'], label=n['label'], size=n['size'], color=n['color']) for n in graph_data['nodes']]
         edges = [Edge(source=e['source'], target=e['target'], label=e['label'], length=300) for e in graph_data['edges']]
@@ -229,12 +245,18 @@ elif layer == "3. Legal & Disclosure":
     col1, col2 = st.columns(2)
     with col1:
         st.subheader("Ownership Rights (PA Title 15)")
-        res = requests.get(api_url("/api/v1/legal/compliance/ownership-rights")).json()
-        st.write(f"**Regulation:** {res['regulation']}")
-        st.write(f"**Status:** {res['liability_status']}")
+        try:
+            res = requests.get(api_url("/api/v1/legal/compliance/ownership-rights"), timeout=2).json()
+            st.write(f"**Regulation:** {res['regulation']}")
+            st.write(f"**Status:** {res['liability_status']}")
+        except:
+            st.error("Could not fetch legal data.")
         
     with col2:
         st.subheader("Knowledge Disclosure (PA UTSA)")
-        res = requests.get(api_url("/api/v1/legal/compliance/knowledge-disclosure")).json()
-        st.write(f"**CAD Encryption:** {'✅ Active' if res['cad_encryption_status'] else '❌ Inactive'}")
-        st.write(f"**Compliance:** {'Verified' if res['is_compliant'] else 'Attention Required'}")
+        try:
+            res = requests.get(api_url("/api/v1/legal/compliance/knowledge-disclosure"), timeout=2).json()
+            st.write(f"**CAD Encryption:** {'✅ Active' if res['cad_encryption_status'] else '❌ Inactive'}")
+            st.write(f"**Compliance:** {'Verified' if res['is_compliant'] else 'Attention Required'}")
+        except:
+            st.error("Could not fetch disclosure data.")
