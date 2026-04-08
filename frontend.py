@@ -682,6 +682,7 @@ if layer == "Overview & Mission":
 #  COMPANY PROFILE
 # ════════════════════════════════════════════════════════════════════════════
 elif layer == "Company Profile":
+    
     try:
         profile = requests.get(api_url("/api/v1/operational/company-profile")).json()
     except Exception:
@@ -693,15 +694,14 @@ elif layer == "Company Profile":
 
     with col_title:
         st.header(f"{profile['name']}")
-        st.markdown(f"*{profile['address']}* — Founded {profile['founded']} — NAICS {profile['naics']}")
+    st.markdown(f"*{profile['address']}* — Founded {profile['founded']} — NAICS {profile['naics']}")
 
     with col_select:
-        # Company selection (for demo, only one company is available)
         selected_company = st.selectbox(
-            "Select Company",
+            "🏢 Select Company",
             ["Hartwell Precision Manufacturing, Inc."],
-            index=0, # Pre-select the only available company
-            label_visibility="collapsed" # Hide label since it's redundant with the header
+            index=0
+            #label_visibility="collapsed" # Hide label since it's redundant with the header
         )
 
     st.markdown("---")
