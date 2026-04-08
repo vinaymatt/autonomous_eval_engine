@@ -682,6 +682,15 @@ if layer == "Overview & Mission":
 #  COMPANY PROFILE
 # ════════════════════════════════════════════════════════════════════════════
 elif layer == "Company Profile":
+    # Company selection (for demo, only one company is available)
+    selected_company = st.selectbox(
+        "🏢 Select Company",
+        ["Hartwell Precision Manufacturing, Inc."],
+        index=0
+    )
+    
+    st.markdown("---")
+
     try:
         profile = requests.get(api_url("/api/v1/operational/company-profile")).json()
     except Exception:
