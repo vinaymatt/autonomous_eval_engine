@@ -623,7 +623,7 @@ if layer == "Overview & Mission":
   
     # Goal Section
     st.markdown('<p class="header-font">🎯 Our Mission</p>', unsafe_allow_html=True)
-    col_goal_text, col_goal_img = st.columns([1, 1.4], gap="large", vertical_alignment="center")
+    col_goal_text, col_goal_img = st.columns([1, 1], gap="large", vertical_alignment="center")
     with col_goal_text:
         st.markdown("""
             <p class="large-font">
