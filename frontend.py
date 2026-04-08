@@ -664,8 +664,7 @@ if layer == "Overview & Mission":
             else:
                 st.image("https://via.placeholder.com/150", width=150, caption="(Image missing)")
             st.markdown(f'<p style="font-size: 18px; font-weight: bold; margin-bottom: 0px;">{member["name"]}</p>', unsafe_allow_html=True)
-            st.markdown(f'<p style="font-size: 16px;">📧 {member["email"]}</p>', unsafe_allow_html=True)
-
+            st.markdown(f'<p style="font-size: 16px;">📧 <a href="mailto:{member["email"]}" style="color: #3b82f6; text-decoration: none;">{member["email"]}</a></p>', unsafe_allow_html=True)
     st.markdown("---")
     st.markdown('<p class="header-font">🚀 Our Strategic Impact</p>', unsafe_allow_html=True)
     st.markdown("""
