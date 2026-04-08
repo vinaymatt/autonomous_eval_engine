@@ -67,7 +67,7 @@ if layer == "0. Welcome & Overview":
             st.write(f"📧 {member['email']}")
 
     st.markdown("---")
-    st.subheader("🚀 Our Goals")
+    st.header("🚀 Our Goals")
     st.write("""
         - **Digitization:** Creating precise digital replicas of physical manufacturing facilities.
         - **Resilience:** Using Machine Learning to predict and mitigate supply chain and market risks.
