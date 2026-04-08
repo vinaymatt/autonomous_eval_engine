@@ -26,7 +26,7 @@ def get_image_as_base64(path):
 # Set page config for a professional look
 st.set_page_config(page_title="SMM Evaluation Engine", layout="wide")
 
-# Custom CSS for uniform image sizing
+# Custom CSS for uniform image sizing and larger fonts
 st.markdown("""
     <style>
     .team-img {
@@ -38,9 +38,17 @@ st.markdown("""
     }
     .goal-img {
         width: 100%;
-        height: 300px;
+        height: 500px;
         object-fit: cover;
         border-radius: 15px;
+    }
+    .large-font {
+        font-size: 22px !important;
+        line-height: 1.6 !important;
+    }
+    .header-font {
+        font-size: 32px !important;
+        font-weight: bold !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -56,15 +64,17 @@ layer = st.sidebar.radio("Select Layer", ["0. Welcome & Overview", "1. Digital T
 if layer == "0. Welcome & Overview":
   
     # Goal Section
-    st.header("🎯 Our Mission")
-    col_goal_text, col_goal_img = st.columns([2, 1])
+    st.markdown('<p class="header-font">🎯 Our Mission</p>', unsafe_allow_html=True)
+    col_goal_text, col_goal_img = st.columns([1.2, 1])
     with col_goal_text:
-        st.write("""
+        st.markdown("""
+            <p class="large-font">
             Our goal is to revolutionize the evaluation and digitization of Small and Medium Manufacturing (SMM) enterprises. 
             By leveraging advanced AI, Graph Neural Networks, and Digital Twin technology, we transform opaque industrial 
             assets into transparent, data-driven insights. Our platform enables seamless asset transfer, 
             valuation accuracy, and operational resilience for the next generation of manufacturing.
-        """)
+            </p>
+        """, unsafe_allow_html=True)
     with col_goal_img:
         # Use local image if available, else placeholder
         goal_img_path = "assets/images/front.jpg"
@@ -77,8 +87,8 @@ if layer == "0. Welcome & Overview":
     st.markdown("---")
 
     # About US Section
-    st.header("👥 About Us")
-    st.write("We are a group of PHD students and a professor from Lisa Lab of Industrial Engineering Department at Penn State University.")
+    st.markdown('<p class="header-font">👥 About Us</p>', unsafe_allow_html=True)
+    st.markdown('<p class="large-font">We are a group of PHD students and a professor from Lisa Lab of Industrial Engineering Department at Penn State University.</p>', unsafe_allow_html=True)
     
     # 4 columns for team members
     team_cols = st.columns(4)
@@ -96,19 +106,21 @@ if layer == "0. Welcome & Overview":
                 st.markdown(f'<img src="{img_b64}" class="team-img" alt="{member["name"]}">', unsafe_allow_html=True)
             else:
                 st.image("https://via.placeholder.com/150", width=150, caption="(Image missing)")
-            st.write(f"**{member['name']}**")
-            st.write(f"📧 {member['email']}")
+            st.markdown(f'<p style="font-size: 18px; font-weight: bold; margin-bottom: 0px;">{member["name"]}</p>', unsafe_allow_html=True)
+            st.markdown(f'<p style="font-size: 16px;">📧 {member["email"]}</p>', unsafe_allow_html=True)
 
     st.markdown("---")
-    st.header("🚀 Our Strategic Impact")
-    st.write("""
+    st.markdown('<p class="header-font">🚀 Our Strategic Impact</p>', unsafe_allow_html=True)
+    st.markdown("""
+        <p class="large-font">
         This initiative aims to counter the economic threat posed by retiring business owners by automating the 
         evaluation and transfer of legacy firms. By constructing a digital twin that visualizes machinery, workflows, 
         and hidden supply chain dependencies, we eliminate the information asymmetry that often forces 
         liquidation. This system transforms an opaque, risky transaction into a transparent, data-driven acquisition. 
         Ultimately, AEEVE preserves critical institutions and prevents the cascading economic failure that occurs 
         when a viable company shuts down simply because it cannot find a successor.
-    """)
+        </p>
+    """, unsafe_allow_html=True)
 
 # 1. OPERATIONAL CORE LAYER
 elif layer == "1. Digital Twin":
